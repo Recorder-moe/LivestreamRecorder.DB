@@ -10,9 +10,6 @@ jobs:
   update-service:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-      with: 
-        repository: ${{ github.repository_owner }}/LivestreamRecorderService
     - uses: fatjyc/update-submodule-action@v6.0
       with:
         repo: LivestreamRecorderService
@@ -26,9 +23,6 @@ jobs:
   update-backend:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-      with: 
-        repository: ${{ github.repository_owner }}/LivestreamRecorderBackend
     - uses: fatjyc/update-submodule-action@v6.0
       with:
         repo: LivestreamRecorderBackend
