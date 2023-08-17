@@ -1,0 +1,41 @@
+name: update-submodule
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  update-service:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+      with: 
+        repository: ${{ github.repository_owner }}/LivestreamRecorderService
+    - uses: fatjyc/update-submodule-action@v6.0
+      with:
+        repo: LivestreamRecorderService
+        sync_ref: master
+        user: ${{ github.repository_owner }}
+        token: ${{ secrets.CR_PAT }}
+        repo_owner: ${{ github.repository_owner }}
+        committor_username: ${{ github.repository_owner }}
+        committor_email: actions@github.com
+        path: ${{ github.event.repository.name }}
+  update-backend:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+      with: 
+        repository: ${{ github.repository_owner }}/LivestreamRecorderBackend
+    - uses: fatjyc/update-submodule-action@v6.0
+      with:
+        repo: LivestreamRecorderBackend
+        sync_ref: dev
+        user: ${{ github.repository_owner }}
+        token: ${{ secrets.CR_PAT }}
+        repo_owner: ${{ github.repository_owner }}
+        committor_username: ${{ github.repository_owner }}
+        committor_email: actions@github.com
+        path: ${{ github.event.repository.name }}
