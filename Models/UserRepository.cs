@@ -20,13 +20,13 @@ public class UserRepository :
     {
     }
 
-    public override Task<User?> GetByIdAsync(string id)
+    public override async Task<User?> GetByIdAsync(string id)
 #if COUCHDB
-        => base.GetByIdAsync($"{id}:{id}");
+        => await base.GetByIdAsync($"{id}:{id}");
 #elif COSMOSDB
-        => base.GetByPartitionKey(id)
+        => (await base.GetByPartitionKeyAsync(id))
                .Where(p => p.id == id)
-               .SingleOrDefaultAsync();
+               .SingleOrDefault();
 #endif
 
     public override string CollectionName { get; } = "Users";

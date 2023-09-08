@@ -38,9 +38,9 @@ public abstract class CosmosDbRepository<T> : IRepository<T> where T : Entity
     public virtual Task<T?> GetByIdAsync(string id)
         => All().SingleOrDefaultAsync(p => p.id == id);
 
-    public virtual IQueryable<T> GetByPartitionKey(string partitionKey)
-        => All().WithPartitionKey(partitionKey)
-            ?? throw new EntityNotFoundException($"Entity with partition key: {partitionKey} was not found.");
+    public virtual Task<List<T>> GetByPartitionKeyAsync(string partitionKey)
+        => Task.FromResult(All().WithPartitionKey(partitionKey).ToList()
+            ?? throw new EntityNotFoundException($"Entity with partition key: {partitionKey} was not found."));
 
     public virtual bool Exists(string id)
 #pragma warning disable CA1827 // 不要在可使用 Any() 時使用 Count() 或 LongCount()

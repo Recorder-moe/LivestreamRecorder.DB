@@ -20,16 +20,16 @@ public class ChannelRepository :
     {
     }
 
-    public Task<Channel?> GetChannelByIdAndSourceAsync(string channelId, string source)
+    public async Task<Channel?> GetChannelByIdAndSourceAsync(string channelId, string source)
 #if COUCHDB
-        => base.GetByIdAsync($"{source}:{channelId}");
+        => await base.GetByIdAsync($"{source}:{channelId}");
 #elif COSMOSDB
-        => base.GetByPartitionKey(source)
-               .Where(p => p.id == channelId)
-               .SingleOrDefaultAsync();
+        => (await base.GetByPartitionKeyAsync(source))
+                      .Where(p => p.id == channelId)
+                      .SingleOrDefault();
 #endif
 
-    public IQueryable<Channel> GetChannelsBySource(string source) => base.GetByPartitionKey(source);
+    public Task<List<Channel>> GetChannelsBySourceAsync(string source) => base.GetByPartitionKeyAsync(source);
 
     public override string CollectionName { get; } = "Channels";
 }

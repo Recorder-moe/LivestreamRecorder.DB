@@ -20,16 +20,16 @@ public class VideoRepository :
     {
     }
 
-    public Task<Video?> GetVideoByIdAndChannelIdAsync(string videoId, string channelId)
+    public async Task<Video?> GetVideoByIdAndChannelIdAsync(string videoId, string channelId)
 #if COUCHDB
-        => base.GetByIdAsync($"{channelId}:{videoId}");
+        => await base.GetByIdAsync($"{channelId}:{videoId}");
 #elif COSMOSDB
-        => base.GetByPartitionKey(channelId)
-               .Where(p => p.id == videoId)
-               .SingleOrDefaultAsync();
+        => (await base.GetByPartitionKeyAsync(channelId))
+                      .Where(p => p.id == videoId)
+                      .SingleOrDefault();
 #endif
 
-    public IQueryable<Video> GetVideosByChannel(string channelId) => base.GetByPartitionKey(channelId);
+    public Task<List<Video>> GetVideosByChannelAsync(string channelId) => base.GetByPartitionKeyAsync(channelId);
 
     public override string CollectionName { get; } = "Videos";
 }

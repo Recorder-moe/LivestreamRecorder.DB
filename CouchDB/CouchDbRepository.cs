@@ -2,9 +2,13 @@
 using CouchDB.Driver;
 using CouchDB.Driver.Extensions;
 using CouchDB.Driver.Query.Extensions;
+using CouchDB.Driver.Types;
+using CouchDB.Driver.Views;
+using Flurl.Http;
 using LivestreamRecorder.DB.Exceptions;
 using LivestreamRecorder.DB.Interfaces;
 using LivestreamRecorder.DB.Models;
+using System.Collections.Generic;
 using System.Linq.Expressions;
 
 namespace LivestreamRecorder.DB.CouchDB;
@@ -40,9 +44,15 @@ public abstract class CouchDbRepository<T> : IRepository<T> where T : Entity
     public virtual Task<T?> GetByIdAsync(string Id)
         => Database.FindAsync(Id);
 
-    public virtual IQueryable<T> GetByPartitionKey(string partitionKey)
-        => Database.Where(p => p.Id.IsMatch(@$"^{partitionKey}:.*$"))
-            ?? throw new EntityNotFoundException($"Entity with partition key: {partitionKey} was not found.");
+    public virtual async Task<List<T>> GetByPartitionKeyAsync(string partitionKey)
+    {
+        var request = Database.NewRequest().AppendPathSegments("_partition", partitionKey, "_all_docs");
+
+        var response = await request.GetJsonAsync<CouchViewList<string, RevisionInfo, T>>();
+        var keys = response.Rows.Select(p => p.Id).ToList();
+
+        return await Database.FindManyAsync(keys.AsReadOnly());
+    }
 
     public virtual bool Exists(string Id)
         => Database.Any(p => p.Id == Id);

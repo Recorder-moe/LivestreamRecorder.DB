@@ -1,4 +1,4 @@
-﻿using LivestreamRecorder.DB.Exceptions;
+﻿using LivestreamRecorder.DB.Models;
 using System.Linq.Expressions;
 
 namespace LivestreamRecorder.DB.Interfaces;
@@ -19,7 +19,7 @@ public interface IRepository<T> where T : IEntity
     /// <param name="id"></param>
     /// <returns></returns>
     Task<T?> GetByIdAsync(string id);
-    IQueryable<T> GetByPartitionKey(string partitionKey);
+    Task<List<T>> GetByPartitionKeyAsync(string partitionKey);
     Task<T?> ReloadEntityFromDBAsync(T entity);
     IQueryable<T> Where(Expression<Func<T, bool>> predicate);
 }

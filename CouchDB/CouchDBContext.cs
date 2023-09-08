@@ -65,11 +65,6 @@ public class CouchDBContext : CouchContext
             (builder) => builder.IndexBy(p => p.Id)
         },
         {
-            "_id, Monitoring",
-            (builder) => builder.IndexBy(p => p.Id)
-                                .ThenBy(p => p.Monitoring)
-        },
-        {
             "Source",
             (builder) => builder.IndexByDescending(p => p.Source)
         }
