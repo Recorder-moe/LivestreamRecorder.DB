@@ -3,6 +3,7 @@ using LivestreamRecorder.DB.Interfaces;
 using LivestreamRecorder.DB.Models;
 using Microsoft.EntityFrameworkCore;
 using Omu.ValueInjecter;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq.Expressions;
 
 namespace LivestreamRecorder.DB.CosmosDB;
@@ -52,6 +53,7 @@ public abstract class CosmosDbRepository<T> : IRepository<T> where T : Entity
             ? throw new ArgumentNullException(nameof(entity))
             : Task.FromResult(ObjectSet.Add(entity).Entity);
 
+    [RequiresUnreferencedCode("CosmosDB repository use reflection to update entity.")]
     public virtual async Task<T> UpdateAsync(T entity)
     {
         var entityToUpdate = await GetByIdAsync(entity.id);

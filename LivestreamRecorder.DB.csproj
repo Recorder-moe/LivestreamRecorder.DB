@@ -4,21 +4,22 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-<Configurations>CouchDB;CosmosDB;AzureCosmosDB_Release;ApacheCouchDB_Release</Configurations>
-</PropertyGroup>
+    <IsAotCompatible>false</IsAotCompatible>
+    <Configurations>CouchDB;CosmosDB;AzureCosmosDB_Release;ApacheCouchDB_Release</Configurations>
+  </PropertyGroup>
 
-<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='CosmosDB|AnyCPU'" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='CosmosDB|AnyCPU'" />
 
-<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='CouchDB|AnyCPU'" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='CouchDB|AnyCPU'" />
 
-<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ApacheCouchDB_Release|AnyCPU'">
-<DefineConstants>$(DefineConstants);COUCHDB;RELEASE</DefineConstants>
-<Optimize>True</Optimize>
-</PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ApacheCouchDB_Release|AnyCPU'">
+    <DefineConstants>$(DefineConstants);COUCHDB;RELEASE</DefineConstants>
+    <Optimize>True</Optimize>
+  </PropertyGroup>
 
-<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='AzureCosmosDB_Release|AnyCPU'">
-<DefineConstants>$(DefineConstants);COSMOSDB;RELEASE</DefineConstants>
-<Optimize>True</Optimize>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='AzureCosmosDB_Release|AnyCPU'">
+    <DefineConstants>$(DefineConstants);COSMOSDB;RELEASE</DefineConstants>
+    <Optimize>True</Optimize>
   </PropertyGroup>
 
   <ItemGroup>
@@ -27,4 +28,7 @@
     <PackageReference Include="ValueInjecter" Version="3.2.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <TrimmerRootAssembly Include="ValueInjecter" />
+  </ItemGroup>
 </Project>

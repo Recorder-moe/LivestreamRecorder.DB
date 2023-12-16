@@ -1,5 +1,5 @@
-﻿using Newtonsoft.Json;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace LivestreamRecorder.DB.Models;
 #pragma warning disable CS8618 // 退出建構函式時，不可為 Null 的欄位必須包含非 Null 值。請考慮宣告為可為 Null。
@@ -27,38 +27,38 @@ public class Channel : Entity
     }
 #endif
 
-    [JsonProperty(nameof(ChannelName))]
+    [JsonPropertyName(nameof(ChannelName))]
     public string ChannelName { get; set; }
 
     [Required]
-    [JsonProperty(nameof(Source))]
+    [JsonPropertyName(nameof(Source))]
     public string Source { get; set; }
 
-    [JsonProperty(nameof(Monitoring))]
+    [JsonPropertyName(nameof(Monitoring))]
     public bool Monitoring { get; set; } = false;
 
-    [JsonProperty(nameof(Avatar))]
+    [JsonPropertyName(nameof(Avatar))]
     public string? Avatar { get; set; }
 
-    [JsonProperty(nameof(Banner))]
+    [JsonPropertyName(nameof(Banner))]
     public string? Banner { get; set; }
 
-    [JsonProperty(nameof(LatestVideoId))]
+    [JsonPropertyName(nameof(LatestVideoId))]
     public string? LatestVideoId { get; set; }
 
-    [JsonProperty(nameof(Hide))]
+    [JsonPropertyName(nameof(Hide))]
     public bool? Hide { get; set; } = false;
 
-    [JsonProperty(nameof(UseCookiesFile))]
+    [JsonPropertyName(nameof(UseCookiesFile))]
     public bool? UseCookiesFile { get; set; } = false;
 
-    [JsonProperty(nameof(SkipNotLiveStream))]
+    [JsonPropertyName(nameof(SkipNotLiveStream))]
     public bool? SkipNotLiveStream { get; set; } = true;
 
-    [JsonProperty(nameof(AutoUpdateInfo))]
+    [JsonPropertyName(nameof(AutoUpdateInfo))]
     public bool? AutoUpdateInfo { get; set; } = true;
 
-    [JsonProperty(nameof(Note))]
+    [JsonPropertyName(nameof(Note))]
     public string? Note { get; set; }
 
 #if COSMOSDB

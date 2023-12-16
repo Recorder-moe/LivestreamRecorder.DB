@@ -8,7 +8,6 @@ using Flurl.Http;
 using LivestreamRecorder.DB.Exceptions;
 using LivestreamRecorder.DB.Interfaces;
 using LivestreamRecorder.DB.Models;
-using System.Collections.Generic;
 using System.Linq.Expressions;
 
 namespace LivestreamRecorder.DB.CouchDB;

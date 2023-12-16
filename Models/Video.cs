@@ -1,6 +1,6 @@
 ﻿using LivestreamRecorder.DB.Enums;
-using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace LivestreamRecorder.DB.Models;
 #pragma warning disable CS8618 // 退出建構函式時，不可為 Null 的欄位必須包含非 Null 值。請考慮宣告為可為 Null。
@@ -20,45 +20,45 @@ public class Video : Entity
 #endif
 
     [Required]
-    [JsonProperty(nameof(ChannelId))]
+    [JsonPropertyName(nameof(ChannelId))]
     public string ChannelId { get; set; }
 
     [Required]
-    [JsonProperty(nameof(Source))]
+    [JsonPropertyName(nameof(Source))]
     public string Source { get; set; }
 
-    [JsonProperty(nameof(Status))]
+    [JsonPropertyName(nameof(Status))]
     public VideoStatus Status { get; set; }
 
-    [JsonProperty(nameof(IsLiveStream))]
+    [JsonPropertyName(nameof(IsLiveStream))]
     public bool? IsLiveStream { get; set; }
 
-    [JsonProperty(nameof(Title))]
+    [JsonPropertyName(nameof(Title))]
     public string Title { get; set; }
 
-    [JsonProperty(nameof(Description))]
+    [JsonPropertyName(nameof(Description))]
     public string? Description { get; set; }
 
-    [JsonProperty(nameof(Timestamps))]
+    [JsonPropertyName(nameof(Timestamps))]
     public Timestamps Timestamps { get; set; }
 
     // My system upload timestamp
-    [JsonProperty(nameof(ArchivedTime))]
+    [JsonPropertyName(nameof(ArchivedTime))]
     public DateTime? ArchivedTime { get; set; }
 
-    [JsonProperty(nameof(Thumbnail))]
+    [JsonPropertyName(nameof(Thumbnail))]
     public string? Thumbnail { get; set; }
 
-    [JsonProperty(nameof(Filename))]
+    [JsonPropertyName(nameof(Filename))]
     public string? Filename { get; set; }
 
-    [JsonProperty(nameof(Size))]
+    [JsonPropertyName(nameof(Size))]
     public long? Size { get; set; }
 
-    [JsonProperty(nameof(SourceStatus))]
+    [JsonPropertyName(nameof(SourceStatus))]
     public VideoStatus? SourceStatus { get; set; } = VideoStatus.Unknown;
 
-    [JsonProperty(nameof(Note))]
+    [JsonPropertyName(nameof(Note))]
     public string? Note { get; set; }
 
 #if COSMOSDB

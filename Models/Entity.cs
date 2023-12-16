@@ -2,7 +2,7 @@
 using CouchDB.Driver.Types;
 #endif
 using LivestreamRecorder.DB.Interfaces;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace LivestreamRecorder.DB.Models;
 
@@ -17,9 +17,8 @@ public abstract class Entity :
     /// <summary>
     /// Entity identifier
     /// </summary>
-#pragma warning disable CA1507 // 使用 nameof 表示符號名稱
-    [JsonProperty("id", NullValueHandling = NullValueHandling.Ignore)]
-#pragma warning restore CA1507 // 使用 nameof 表示符號名稱
+    [JsonPropertyName("id")]
+    [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString | JsonNumberHandling.WriteAsString)]
     public virtual string id
     {
         get
@@ -39,7 +38,8 @@ public abstract class Entity :
     }
 
 #if COUCHDB
-    [JsonProperty("_id", NullValueHandling = NullValueHandling.Ignore)]
+    [JsonPropertyName("_id")]
+    [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString | JsonNumberHandling.WriteAsString)]
     public override string Id
     {
         get => $"{id}:{id}";
