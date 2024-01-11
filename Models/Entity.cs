@@ -18,7 +18,6 @@ public abstract class Entity :
     /// Entity identifier
     /// </summary>
     [JsonPropertyName("id")]
-    [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString | JsonNumberHandling.WriteAsString)]
     public virtual string id
     {
         get
@@ -39,7 +38,6 @@ public abstract class Entity :
 
 #if COUCHDB
     [JsonPropertyName("_id")]
-    [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString | JsonNumberHandling.WriteAsString)]
     public override string Id
     {
         get => $"{id}:{id}";
