@@ -1,5 +1,7 @@
 # LivestreamRecorder.DB
 
+[![DeepSource](https://app.deepsource.com/gh/Recorder-moe/LivestreamRecorder.DB.svg/?label=active+issues&show_trend=true&token=U59HJ3viB8-ZllFpxXJLmYdj)](https://app.deepsource.com/gh/Recorder-moe/LivestreamRecorder.DB/)
+
 Recorder.moe C# 專案的資料庫存取子專案，以 Entity Framework Style + Repository Pattern + Unit of Work Pattern 介接 CosmosDB 和 CouchDB。
 
 應用於以下專案
