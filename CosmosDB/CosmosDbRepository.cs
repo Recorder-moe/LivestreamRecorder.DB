@@ -14,7 +14,7 @@ public abstract class CosmosDbRepository<T> : IRepository<T> where T : Entity
     private readonly DbContext _context;
     public abstract string CollectionName { get; }
 
-    public CosmosDbRepository(IUnitOfWork unitOfWork)
+    protected CosmosDbRepository(IUnitOfWork unitOfWork)
     {
         UnitOfWork u = (UnitOfWork)unitOfWork;
         _context = u.Context;
@@ -45,7 +45,8 @@ public abstract class CosmosDbRepository<T> : IRepository<T> where T : Entity
 
     public virtual bool Exists(string id)
 #pragma warning disable CA1827 // 不要在可使用 Any() 時使用 Count() 或 LongCount()
-        => All().Where(p => p.id == id).Count() > 0;
+        // skipcq: CS-R1032
+        => All().Count(p => p.id == id) > 0;
 #pragma warning restore CA1827 // 不要在可使用 Any() 時使用 Count() 或 LongCount()
 
     public virtual Task<T> AddAsync(T entity)
@@ -82,6 +83,7 @@ public abstract class CosmosDbRepository<T> : IRepository<T> where T : Entity
         {
             _context.Entry(entity).Reload();
         }
+        // skipcq: CS-R1009
         catch (NullReferenceException) { }
 #pragma warning disable CS8619 // 值中參考型別的可 Null 性與目標型別不符合。
         return Task.FromResult(entity);

@@ -3,12 +3,11 @@
 
 using System;
 
-namespace LivestreamRecorder.DB.Exceptions
-{
-    public class EntityAlreadyExistsException : Exception
-    {
-        public EntityAlreadyExistsException() { }
+namespace LivestreamRecorder.DB.Exceptions;
 
-        public EntityAlreadyExistsException(string message): base(message) { }
-    }
+public class EntityAlreadyExistsException : Exception
+{
+    public EntityAlreadyExistsException() { }
+
+    public EntityAlreadyExistsException(string message) : base(message) { }
 }

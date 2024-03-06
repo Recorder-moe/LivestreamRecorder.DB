@@ -3,12 +3,11 @@
 
 using System;
 
-namespace LivestreamRecorder.DB.Exceptions
-{
-    public class EntityNotFoundException : Exception
-    {
-        public EntityNotFoundException() { }
+namespace LivestreamRecorder.DB.Exceptions;
 
-        public EntityNotFoundException(string message): base(message) { }
-    }
+public class EntityNotFoundException : Exception
+{
+    public EntityNotFoundException() { }
+
+    public EntityNotFoundException(string message) : base(message) { }
 }
