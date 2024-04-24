@@ -32,11 +32,11 @@ public class UnitOfWork_Public : UnitOfWork
             tasks.AddRange(_context.VideoIndexes
                                    .Where(index => existIndexes.All(p => p.Name != index.Key))
                                    .Select(index => database.CreateIndexAsync(index.Key,
-                                                                              index.Value,
-                                                                              new IndexOptions
-                                                                              {
-                                                                                  Partitioned = false,
-                                                                              })));
+                                       index.Value,
+                                       new IndexOptions
+                                       {
+                                           Partitioned = false,
+                                       })));
         }
 
         async Task prepareChannelIndexAsync()
@@ -46,11 +46,11 @@ public class UnitOfWork_Public : UnitOfWork
             tasks.AddRange(_context.ChannelIndexes
                                    .Where(index => existIndexes.All(p => p.Name != index.Key))
                                    .Select(index => database.CreateIndexAsync(index.Key,
-                                                                              index.Value,
-                                                                              new IndexOptions
-                                                                              {
-                                                                                  Partitioned = false,
-                                                                              })));
+                                       index.Value,
+                                       new IndexOptions
+                                       {
+                                           Partitioned = false,
+                                       })));
         }
     }
 }

@@ -6,7 +6,8 @@ namespace LivestreamRecorder.DB.CouchDB
     {
         public UnitOfWork_Private(CouchDBContext context)
             : base(context)
-        { }
+        {
+        }
     }
 }
 #endif

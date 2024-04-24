@@ -10,7 +10,9 @@ namespace LivestreamRecorder.DB.CouchDB;
 // ReSharper disable once ClassNeverInstantiated.Global
 public class CouchDBContext : CouchContext
 {
-    public CouchDBContext() { }
+    public CouchDBContext()
+    {
+    }
 
     public CouchDBContext(CouchOptions options) : base(options)
     {
@@ -83,45 +85,51 @@ public class CouchDBContext : CouchContext
     protected override void OnDatabaseCreating(CouchDatabaseBuilder databaseBuilder)
     {
         #region Videos
-        databaseBuilder.Document<Video>()
-            .ToDatabase("videos");
 
         databaseBuilder.Document<Video>()
-            .IsPartitioned();
+                       .ToDatabase("videos");
+
+        databaseBuilder.Document<Video>()
+                       .IsPartitioned();
 
         foreach (KeyValuePair<string, Action<IIndexBuilder<Video>>> index in VideoIndexes)
         {
             databaseBuilder.Document<Video>()
                            .HasIndex(index.Key,
-                                     index.Value,
-                                     new IndexOptions
-                                         { Partitioned = false, });
+                               index.Value,
+                               new IndexOptions
+                                   { Partitioned = false, });
         }
+
         #endregion
 
         #region Channels
-        databaseBuilder.Document<Channel>()
-            .ToDatabase("channels");
 
         databaseBuilder.Document<Channel>()
-            .IsPartitioned();
+                       .ToDatabase("channels");
+
+        databaseBuilder.Document<Channel>()
+                       .IsPartitioned();
 
         foreach (KeyValuePair<string, Action<IIndexBuilder<Channel>>> index in ChannelIndexes)
         {
             databaseBuilder.Document<Channel>()
                            .HasIndex(index.Key,
-                                     index.Value,
-                                     new IndexOptions
-                                         { Partitioned = false, });
+                               index.Value,
+                               new IndexOptions
+                                   { Partitioned = false, });
         }
+
         #endregion
 
         #region Users
-        databaseBuilder.Document<User>()
-            .ToDatabase("users");
 
         databaseBuilder.Document<User>()
-            .IsPartitioned();
+                       .ToDatabase("users");
+
+        databaseBuilder.Document<User>()
+                       .IsPartitioned();
+
         #endregion
     }
 }
