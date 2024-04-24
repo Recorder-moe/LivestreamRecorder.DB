@@ -1,6 +1,5 @@
 ﻿#if COSMOSDB
 using LivestreamRecorder.DB.CosmosDB;
-using Microsoft.EntityFrameworkCore;
 #elif COUCHDB
 using LivestreamRecorder.DB.CouchDB;
 #endif
@@ -25,8 +24,7 @@ public class VideoRepository :
         => await base.GetByIdAsync($"{channelId}:{videoId}");
 #elif COSMOSDB
         => (await base.GetByPartitionKeyAsync(channelId))
-                      .Where(p => p.id == videoId)
-                      .SingleOrDefault();
+            .SingleOrDefault(p => p.id == videoId);
 #endif
 
     public Task<List<Video>> GetVideosByChannelAsync(string channelId) => base.GetByPartitionKeyAsync(channelId);

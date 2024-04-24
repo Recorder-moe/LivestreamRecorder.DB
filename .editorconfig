@@ -1,0 +1,3 @@
+[*.cs]
+
+dotnet_naming_rule.private_instance_fields_rule.style = camel_case_begin_with__

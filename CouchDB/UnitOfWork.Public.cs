@@ -1,51 +1,56 @@
 ﻿#if COUCHDB
+using CouchDB.Driver;
+using CouchDB.Driver.Indexes;
 using LivestreamRecorder.DB.Models;
 
-namespace LivestreamRecorder.DB.CouchDB
-{
-    public class UnitOfWork_Public : UnitOfWork
-    {
-        private readonly CouchDBContext _context;
+namespace LivestreamRecorder.DB.CouchDB;
 
-        public UnitOfWork_Public(CouchDBContext context)
-            : base(context)
+// ReSharper disable once InconsistentNaming
+public class UnitOfWork_Public : UnitOfWork
+{
+    private readonly CouchDBContext _context;
+
+    public UnitOfWork_Public(CouchDBContext context)
+        : base(context)
+    {
+        _context = context;
+        PrepareIndexesAsync().ConfigureAwait(false).GetAwaiter();
+    }
+
+    private async Task PrepareIndexesAsync()
+    {
+        var tasks = new List<Task>();
+        await prepareVideoIndexAsync();
+        await prepareChannelIndexAsync();
+        await Task.WhenAll(tasks);
+        return;
+
+        async Task prepareVideoIndexAsync()
         {
-            _context = context;
-            PrepareIndexesAsync().ConfigureAwait(false).GetAwaiter();
+            ICouchDatabase<Video> database = _context.Client.GetDatabase<Video>();
+            var existIndexes = (await database.GetIndexesAsync()).ToHashSet();
+            tasks.AddRange(_context.VideoIndexes
+                                   .Where(index => existIndexes.All(p => p.Name != index.Key))
+                                   .Select(index => database.CreateIndexAsync(index.Key,
+                                                                              index.Value,
+                                                                              new IndexOptions
+                                                                              {
+                                                                                  Partitioned = false,
+                                                                              })));
         }
 
-        protected async Task PrepareIndexesAsync()
+        async Task prepareChannelIndexAsync()
         {
-            var tasks = new List<Task>();
-            await prepareVideoIndexAsync(tasks);
-            await prepareChannelIndexAsync(tasks);
-            await Task.WhenAll(tasks);
-
-            async Task prepareVideoIndexAsync(List<Task> tasks)
-            {
-                var database = _context.Client.GetDatabase<Video>();
-                var existIndexes = await database.GetIndexesAsync();
-                foreach (var index in _context._videoIndexes)
-                {
-                    if (existIndexes.All(p => p.Name != index.Key))
-                    {
-                        tasks.Add(database.CreateIndexAsync(index.Key, index.Value, new() { Partitioned = false, }));
-                    }
-                }
-            }
-
-            async Task prepareChannelIndexAsync(List<Task> tasks)
-            {
-                var database = _context.Client.GetDatabase<Channel>();
-                var existIndexes = await database.GetIndexesAsync();
-                foreach (var index in _context._channelIndexes)
-                {
-                    if (existIndexes.All(p => p.Name != index.Key))
-                    {
-                        tasks.Add(database.CreateIndexAsync(index.Key, index.Value, new() { Partitioned = false, }));
-                    }
-                }
-            }
+            ICouchDatabase<Channel> database = _context.Client.GetDatabase<Channel>();
+            var existIndexes = (await database.GetIndexesAsync()).ToHashSet();
+            tasks.AddRange(_context.ChannelIndexes
+                                   .Where(index => existIndexes.All(p => p.Name != index.Key))
+                                   .Select(index => database.CreateIndexAsync(index.Key,
+                                                                              index.Value,
+                                                                              new IndexOptions
+                                                                              {
+                                                                                  Partitioned = false,
+                                                                              })));
         }
     }
 }

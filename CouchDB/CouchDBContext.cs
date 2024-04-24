@@ -6,17 +6,20 @@ using LivestreamRecorder.DB.Models;
 
 namespace LivestreamRecorder.DB.CouchDB;
 
+// ReSharper disable once InconsistentNaming
+// ReSharper disable once ClassNeverInstantiated.Global
 public class CouchDBContext : CouchContext
 {
     public CouchDBContext() { }
 
-    public CouchDBContext(CouchOptions<CouchDBContext> options) : base(options)
+    public CouchDBContext(CouchOptions options) : base(options)
     {
     }
 
-    internal Dictionary<string, Action<IIndexBuilder<Video>>> _videoIndexes = new()
+    internal readonly Dictionary<string, Action<IIndexBuilder<Video>>> VideoIndexes = new()
     {
         #region Used by frontend
+
         {
             "_id",
             (builder) => builder.IndexBy(p => p.Id)
@@ -44,8 +47,11 @@ public class CouchDBContext : CouchContext
                                 .ThenByDescending(p => p.Status)
                                 .ThenByDescending(p => p.SourceStatus)
         },
+
         #endregion
+
         #region Used by service
+
         {
             "Status",
             (builder) => builder.IndexByDescending(p => p.Status)
@@ -54,12 +60,14 @@ public class CouchDBContext : CouchContext
             "Source",
             (builder) => builder.IndexByDescending(p => p.Source)
         }
+
         #endregion
     };
 
-    internal Dictionary<string, Action<IIndexBuilder<Channel>>> _channelIndexes = new()
+    internal readonly Dictionary<string, Action<IIndexBuilder<Channel>>> ChannelIndexes = new()
     {
         #region Used by service
+
         {
             "_id",
             (builder) => builder.IndexBy(p => p.Id)
@@ -68,6 +76,7 @@ public class CouchDBContext : CouchContext
             "Source",
             (builder) => builder.IndexByDescending(p => p.Source)
         }
+
         #endregion
     };
 
@@ -80,10 +89,13 @@ public class CouchDBContext : CouchContext
         databaseBuilder.Document<Video>()
             .IsPartitioned();
 
-        foreach (var index in _videoIndexes)
+        foreach (KeyValuePair<string, Action<IIndexBuilder<Video>>> index in VideoIndexes)
         {
             databaseBuilder.Document<Video>()
-                .HasIndex(index.Key, index.Value, new() { Partitioned = false, });
+                           .HasIndex(index.Key,
+                                     index.Value,
+                                     new IndexOptions
+                                         { Partitioned = false, });
         }
         #endregion
 
@@ -94,10 +106,13 @@ public class CouchDBContext : CouchContext
         databaseBuilder.Document<Channel>()
             .IsPartitioned();
 
-        foreach (var index in _channelIndexes)
+        foreach (KeyValuePair<string, Action<IIndexBuilder<Channel>>> index in ChannelIndexes)
         {
             databaseBuilder.Document<Channel>()
-                .HasIndex(index.Key, index.Value, new() { Partitioned = false, });
+                           .HasIndex(index.Key,
+                                     index.Value,
+                                     new IndexOptions
+                                         { Partitioned = false, });
         }
         #endregion
 

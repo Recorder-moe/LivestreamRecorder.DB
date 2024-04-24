@@ -30,10 +30,11 @@ public abstract class Entity :
                 _id = Guid.NewGuid().ToString().Replace("-", "");
 #endif
             }
+
             return _id;
         }
 
-        set => _id = value ?? _id;
+        set => _id = value;
     }
 
 #if COUCHDB
@@ -41,7 +42,7 @@ public abstract class Entity :
     public override string Id
     {
         get => $"{id}:{id}";
-        set => id = value?.Split(':').Last() ?? "";
+        set => id = value.Split(':').Last();
     }
 #endif
 }

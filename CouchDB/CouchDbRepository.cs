@@ -1,7 +1,6 @@
 ﻿#if COUCHDB
 using CouchDB.Driver;
 using CouchDB.Driver.Extensions;
-using CouchDB.Driver.Query.Extensions;
 using CouchDB.Driver.Types;
 using CouchDB.Driver.Views;
 using Flurl.Http;
@@ -14,7 +13,6 @@ namespace LivestreamRecorder.DB.CouchDB;
 
 public abstract class CouchDbRepository<T> : IRepository<T> where T : Entity
 {
-
     public abstract string CollectionName { get; }
     private readonly CouchContext _context;
 
@@ -25,6 +23,7 @@ public abstract class CouchDbRepository<T> : IRepository<T> where T : Entity
     }
 
     private ICouchDatabase<T>? _database;
+
     private ICouchDatabase<T> Database
     {
         get
@@ -40,20 +39,26 @@ public abstract class CouchDbRepository<T> : IRepository<T> where T : Entity
     public virtual IQueryable<T> Where(Expression<Func<T, bool>> predicate)
         => Database.Where(predicate);
 
+    // ReSharper disable once InconsistentNaming
+#pragma warning disable IDE1006
     public virtual Task<T?> GetByIdAsync(string Id)
+#pragma warning restore IDE1006
         => Database.FindAsync(Id);
 
     public virtual async Task<List<T>> GetByPartitionKeyAsync(string partitionKey)
     {
-        var request = Database.NewRequest().AppendPathSegments("_partition", partitionKey, "_all_docs");
+        IFlurlRequest? request = Database.NewRequest().AppendPathSegments("_partition", partitionKey, "_all_docs");
 
-        var response = await request.GetJsonAsync<CouchViewList<string, RevisionInfo, T>>();
+        CouchViewList<string, RevisionInfo, T>? response = await request.GetJsonAsync<CouchViewList<string, RevisionInfo, T>>();
         var keys = response.Rows.Select(p => p.Id).ToList();
 
         return await Database.FindManyAsync(keys.AsReadOnly());
     }
 
+    // ReSharper disable once InconsistentNaming
+#pragma warning disable IDE1006
     public virtual bool Exists(string Id)
+#pragma warning restore IDE1006
         => Database.Any(p => p.Id == Id);
 
     public virtual Task<T> AddOrUpdateAsync(T entity)

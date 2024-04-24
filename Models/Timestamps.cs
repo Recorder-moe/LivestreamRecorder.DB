@@ -6,4 +6,3 @@ public class Timestamps
     public DateTime? ScheduledStartTime { get; set; }
     public DateTime? ActualStartTime { get; set; }
 }
-

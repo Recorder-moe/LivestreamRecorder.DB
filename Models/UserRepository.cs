@@ -1,6 +1,5 @@
 ﻿#if COSMOSDB
 using LivestreamRecorder.DB.CosmosDB;
-using Microsoft.EntityFrameworkCore;
 #elif COUCHDB
 using LivestreamRecorder.DB.CouchDB;
 #endif
@@ -25,8 +24,7 @@ public class UserRepository :
         => await base.GetByIdAsync($"{id}:{id}");
 #elif COSMOSDB
         => (await base.GetByPartitionKeyAsync(id))
-               .Where(p => p.id == id)
-               .SingleOrDefault();
+            .SingleOrDefault(p => p.id == id);
 #endif
 
     public override string CollectionName { get; } = "Users";

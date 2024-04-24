@@ -5,7 +5,6 @@ namespace LivestreamRecorder.DB.CouchDB;
 
 public class UnitOfWork : IUnitOfWork, IDisposable
 {
-
     public CouchContext Context { get; set; }
 
     public UnitOfWork(CouchContext context)
@@ -20,9 +19,12 @@ public class UnitOfWork : IUnitOfWork, IDisposable
     /// <summary>
     /// There's no transaction concept in CouchDB so this actually does nothing.
     /// </summary>
-    public void Commit() { }
+    public void Commit()
+    {
+    }
 
     #region Dispose
+
     private bool _disposedValue;
 
     protected virtual void Dispose(bool disposing)
@@ -48,5 +50,6 @@ public class UnitOfWork : IUnitOfWork, IDisposable
         Dispose(disposing: true);
         GC.SuppressFinalize(this);
     }
+
     #endregion
 }

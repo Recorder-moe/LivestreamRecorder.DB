@@ -10,7 +10,6 @@ namespace LivestreamRecorder.DB.CosmosDB;
 
 public abstract class CosmosDbRepository<T> : IRepository<T> where T : Entity
 {
-
     private readonly DbContext _context;
     public abstract string CollectionName { get; }
 
@@ -21,6 +20,7 @@ public abstract class CosmosDbRepository<T> : IRepository<T> where T : Entity
     }
 
     private DbSet<T>? _objectset;
+
     private DbSet<T> ObjectSet
     {
         get
@@ -41,7 +41,7 @@ public abstract class CosmosDbRepository<T> : IRepository<T> where T : Entity
 
     public virtual Task<List<T>> GetByPartitionKeyAsync(string partitionKey)
         => Task.FromResult(All().WithPartitionKey(partitionKey).ToList()
-            ?? throw new EntityNotFoundException($"Entity with partition key: {partitionKey} was not found."));
+                           ?? throw new EntityNotFoundException($"Entity with partition key: {partitionKey} was not found."));
 
     public virtual bool Exists(string id)
 #pragma warning disable CA1827 // 不要在可使用 Any() 時使用 Count() 或 LongCount()
@@ -57,11 +57,11 @@ public abstract class CosmosDbRepository<T> : IRepository<T> where T : Entity
     [RequiresUnreferencedCode("CosmosDB repository use reflection to update entity.")]
     public virtual async Task<T> UpdateAsync(T entity)
     {
-        var entityToUpdate = await GetByIdAsync(entity.id);
+        T? entityToUpdate = await GetByIdAsync(entity.id);
         if (null == entityToUpdate) throw new EntityNotFoundException($"Entity with id: {entity.id} was not found.");
 
         entityToUpdate.InjectFrom(entity);
-        return ObjectSet.Update(entityToUpdate!).Entity;
+        return ObjectSet.Update(entityToUpdate).Entity;
     }
 
     public virtual Task<T> AddOrUpdateAsync(T entity)
@@ -71,10 +71,10 @@ public abstract class CosmosDbRepository<T> : IRepository<T> where T : Entity
 
     public virtual async Task DeleteAsync(T entity)
     {
-        var entityToDelete = await GetByIdAsync(entity.id);
+        T? entityToDelete = await GetByIdAsync(entity.id);
         if (null == entityToDelete) throw new EntityNotFoundException($"Entity with id: {entity.id} was not found.");
 
-        ObjectSet.Remove(entityToDelete!);
+        ObjectSet.Remove(entityToDelete);
     }
 
     public Task<T?> ReloadEntityFromDBAsync(T entity)
@@ -84,7 +84,9 @@ public abstract class CosmosDbRepository<T> : IRepository<T> where T : Entity
             _context.Entry(entity).Reload();
         }
         // skipcq: CS-R1009
-        catch (NullReferenceException) { }
+        catch (NullReferenceException)
+        {
+        }
 #pragma warning disable CS8619 // 值中參考型別的可 Null 性與目標型別不符合。
         return Task.FromResult(entity);
 #pragma warning restore CS8619 // 值中參考型別的可 Null 性與目標型別不符合。

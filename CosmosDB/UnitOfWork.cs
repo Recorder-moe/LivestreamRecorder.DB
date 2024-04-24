@@ -16,6 +16,7 @@ public class UnitOfWork : IUnitOfWork, IDisposable
     public void Commit() => Context.SaveChanges();
 
     #region Dispose
+
     private bool _disposedValue;
 
     protected virtual void Dispose(bool disposing)
@@ -38,5 +39,6 @@ public class UnitOfWork : IUnitOfWork, IDisposable
         Dispose(disposing: true);
         GC.SuppressFinalize(this);
     }
+
     #endregion
 }
