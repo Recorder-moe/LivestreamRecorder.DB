@@ -14,7 +14,8 @@ public class CouchDBContext : CouchContext
     {
     }
 
-    public CouchDBContext(CouchOptions options) : base(options)
+    // ReSharper disable once SuggestBaseTypeForParameterInConstructor
+    public CouchDBContext(CouchOptions<CouchDBContext> options) : base(options)
     {
     }
 
