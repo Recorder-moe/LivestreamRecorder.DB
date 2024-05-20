@@ -13,7 +13,7 @@ public enum VideoStatus
     Recording = 20,
     Downloading = 21,
 
-    Uploading = 30,
+    [Obsolete("No longer used.")] Uploading = 30,
 
     Archived = 40,
     PermanentArchived = 41,
