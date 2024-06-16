@@ -61,6 +61,14 @@ public abstract class CouchDbRepository<T> : IRepository<T> where T : Entity
 #pragma warning restore IDE1006
         => Database.Any(p => p.Id == Id);
 
+    [Obsolete($"Use {nameof(AddOrUpdateAsync)} instead.")]
+    public Task<T> AddAsync(T entity)
+        => AddOrUpdateAsync(entity);
+
+    [Obsolete($"Use {nameof(AddOrUpdateAsync)} instead.")]
+    public Task<T> UpdateAsync(T entity)
+        => AddOrUpdateAsync(entity);
+
     public virtual Task<T> AddOrUpdateAsync(T entity)
         => Database.AddOrUpdateAsync(entity);
 
