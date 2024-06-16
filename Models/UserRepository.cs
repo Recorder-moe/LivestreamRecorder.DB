@@ -1,30 +1,25 @@
-﻿#if COSMOSDB
+﻿using LivestreamRecorder.DB.Interfaces;
+#if COSMOSDB
 using LivestreamRecorder.DB.CosmosDB;
 #elif COUCHDB
 using LivestreamRecorder.DB.CouchDB;
 #endif
-using LivestreamRecorder.DB.Interfaces;
 
 namespace LivestreamRecorder.DB.Models;
 
-public class UserRepository :
+public class UserRepository(IUnitOfWork unitOfWork) :
 #if COSMOSDB
-    CosmosDbRepository<User>,
+    CosmosDbRepository<User>(unitOfWork),
 #elif COUCHDB
-    CouchDbRepository<User>,
+    CouchDbRepository<User>(unitOfWork),
 #endif
     IUserRepository
 {
-    public UserRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
-    {
-    }
-
     public override async Task<User?> GetByIdAsync(string id)
 #if COUCHDB
         => await base.GetByIdAsync($"{id}:{id}");
 #elif COSMOSDB
-        => (await base.GetByPartitionKeyAsync(id))
-            .SingleOrDefault(p => p.id == id);
+        => (await base.GetByPartitionKeyAsync(id)).SingleOrDefault(p => p.id == id);
 #endif
 
     public override string CollectionName { get; } = "Users";

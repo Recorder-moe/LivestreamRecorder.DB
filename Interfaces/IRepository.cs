@@ -6,6 +6,8 @@ public interface IRepository<T> where T : IEntity
 {
     string CollectionName { get; }
 
+    Task<T> AddAsync(T entity);
+    Task<T> UpdateAsync(T entity);
     Task<T> AddOrUpdateAsync(T entity);
     IQueryable<T> All();
     Task<int> CountAsync();
@@ -13,7 +15,7 @@ public interface IRepository<T> where T : IEntity
     bool Exists(string id);
 
     /// <summary>
-    /// Get a single entity by id. Will return null if no entity is found.
+    ///     Get a single entity by id. Will return null if no entity is found.
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>

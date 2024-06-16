@@ -1,6 +1,6 @@
-﻿using LivestreamRecorder.DB.Enums;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
+using LivestreamRecorder.DB.Enums;
 
 // ReSharper disable EntityFramework.ModelValidation.UnlimitedStringLength
 

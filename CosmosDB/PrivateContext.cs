@@ -9,8 +9,6 @@ namespace LivestreamRecorder.DB.CosmosDB;
 
 public class PrivateContext : DbContext
 {
-    public DbSet<User> Users { get; set; }
-
     public PrivateContext()
     {
     }
@@ -18,6 +16,8 @@ public class PrivateContext : DbContext
     public PrivateContext(DbContextOptions<PrivateContext> options) : base(options)
     {
     }
+
+    public DbSet<User> Users { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

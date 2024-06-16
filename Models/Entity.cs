@@ -1,8 +1,8 @@
 ﻿#if COUCHDB
 using CouchDB.Driver.Types;
 #endif
-using LivestreamRecorder.DB.Interfaces;
 using System.Text.Json.Serialization;
+using LivestreamRecorder.DB.Interfaces;
 
 namespace LivestreamRecorder.DB.Models;
 
@@ -15,7 +15,7 @@ public abstract class Entity :
     private string? _id;
 
     /// <summary>
-    /// Entity identifier
+    ///     Entity identifier
     /// </summary>
     [JsonPropertyName("id")]
     public virtual string id

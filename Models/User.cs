@@ -23,11 +23,10 @@ public class User : Entity
 
     [JsonPropertyName(nameof(Note))] public string? Note { get; set; }
 
-    [JsonPropertyName(nameof(GoogleUID))]
-    // ReSharper disable InconsistentNaming
-    public string? GoogleUID { get; set; }
+    // ReSharper disable InconsistentNaming (UID)
+    [JsonPropertyName(nameof(GoogleUID))] public string? GoogleUID { get; set; }
 
-    [JsonPropertyName(nameof(GithubUID))] public string? GithubUID { get; set; }
+    [JsonPropertyName(nameof(GitHubUID))] public string? GitHubUID { get; set; }
 
     [JsonPropertyName(nameof(MicrosoftUID))]
     public string? MicrosoftUID { get; set; }

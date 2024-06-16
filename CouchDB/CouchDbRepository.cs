@@ -16,9 +16,9 @@ public abstract class CouchDbRepository<T> : IRepository<T> where T : Entity
     public abstract string CollectionName { get; }
     private readonly CouchContext _context;
 
-    public CouchDbRepository(IUnitOfWork unitOfWork)
+    protected CouchDbRepository(IUnitOfWork unitOfWork)
     {
-        UnitOfWork u = (UnitOfWork)unitOfWork;
+        var u = (UnitOfWork)unitOfWork;
         _context = u.Context;
     }
 

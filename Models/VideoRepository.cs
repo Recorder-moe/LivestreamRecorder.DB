@@ -1,33 +1,31 @@
-﻿#if COSMOSDB
+﻿using LivestreamRecorder.DB.Interfaces;
+#if COSMOSDB
 using LivestreamRecorder.DB.CosmosDB;
 #elif COUCHDB
 using LivestreamRecorder.DB.CouchDB;
 #endif
-using LivestreamRecorder.DB.Interfaces;
 
 namespace LivestreamRecorder.DB.Models;
 
-public class VideoRepository :
+public class VideoRepository(IUnitOfWork unitOfWork) :
 # if COSMOSDB
-    CosmosDbRepository<Video>,
+    CosmosDbRepository<Video>(unitOfWork),
 #elif COUCHDB
-    CouchDbRepository<Video>,
+    CouchDbRepository<Video>(unitOfWork),
 #endif
     IVideoRepository
 {
-    public VideoRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
-    {
-    }
-
     public async Task<Video?> GetVideoByIdAndChannelIdAsync(string videoId, string channelId)
 #if COUCHDB
         => await base.GetByIdAsync($"{channelId}:{videoId}");
 #elif COSMOSDB
-        => (await base.GetByPartitionKeyAsync(channelId))
-            .SingleOrDefault(p => p.id == videoId);
+        => (await base.GetByPartitionKeyAsync(channelId)).SingleOrDefault(p => p.id == videoId);
 #endif
 
-    public Task<List<Video>> GetVideosByChannelAsync(string channelId) => base.GetByPartitionKeyAsync(channelId);
+    public Task<List<Video>> GetVideosByChannelAsync(string channelId)
+    {
+        return base.GetByPartitionKeyAsync(channelId);
+    }
 
     public override string CollectionName { get; } = "Videos";
 }

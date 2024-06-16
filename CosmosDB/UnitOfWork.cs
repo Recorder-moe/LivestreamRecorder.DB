@@ -5,15 +5,18 @@ namespace LivestreamRecorder.DB.CosmosDB;
 
 public class UnitOfWork : IUnitOfWork, IDisposable
 {
-    public DbContext Context { get; set; }
-
-    public UnitOfWork(DbContext context)
+    protected UnitOfWork(DbContext context)
     {
         Context = context;
         Context.Database.EnsureCreated();
     }
 
-    public void Commit() => Context.SaveChanges();
+    public DbContext Context { get; set; }
+
+    public void Commit()
+    {
+        Context.SaveChanges();
+    }
 
     #region Dispose
 
@@ -23,10 +26,7 @@ public class UnitOfWork : IUnitOfWork, IDisposable
     {
         if (!_disposedValue)
         {
-            if (disposing)
-            {
-                Context.Dispose();
-            }
+            if (disposing) Context.Dispose();
 
             _disposedValue = true;
             Context = null!;

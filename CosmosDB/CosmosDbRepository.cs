@@ -1,25 +1,24 @@
-﻿using LivestreamRecorder.DB.Exceptions;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Linq.Expressions;
+using LivestreamRecorder.DB.Exceptions;
 using LivestreamRecorder.DB.Interfaces;
 using LivestreamRecorder.DB.Models;
 using Microsoft.EntityFrameworkCore;
 using Omu.ValueInjecter;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq.Expressions;
 
 namespace LivestreamRecorder.DB.CosmosDB;
 
 public abstract class CosmosDbRepository<T> : IRepository<T> where T : Entity
 {
     private readonly DbContext _context;
-    public abstract string CollectionName { get; }
+
+    private DbSet<T>? _objectset;
 
     protected CosmosDbRepository(IUnitOfWork unitOfWork)
     {
-        UnitOfWork u = (UnitOfWork)unitOfWork;
+        var u = (UnitOfWork)unitOfWork;
         _context = u.Context;
     }
-
-    private DbSet<T>? _objectset;
 
     private DbSet<T> ObjectSet
     {
@@ -30,18 +29,28 @@ public abstract class CosmosDbRepository<T> : IRepository<T> where T : Entity
         }
     }
 
+    public abstract string CollectionName { get; }
+
     public virtual IQueryable<T> All()
-        => ObjectSet.AsQueryable();
+    {
+        return ObjectSet.AsQueryable();
+    }
 
     public virtual IQueryable<T> Where(Expression<Func<T, bool>> predicate)
-        => All().Where(predicate);
+    {
+        return All().Where(predicate);
+    }
 
     public virtual Task<T?> GetByIdAsync(string id)
-        => All().SingleOrDefaultAsync(p => p.id == id);
+    {
+        return All().SingleOrDefaultAsync(p => p.id == id);
+    }
 
     public virtual Task<List<T>> GetByPartitionKeyAsync(string partitionKey)
-        => Task.FromResult(All().WithPartitionKey(partitionKey).ToList()
-                           ?? throw new EntityNotFoundException($"Entity with partition key: {partitionKey} was not found."));
+    {
+        return Task.FromResult(All().WithPartitionKey(partitionKey).ToList()
+                               ?? throw new EntityNotFoundException($"Entity with partition key: {partitionKey} was not found."));
+    }
 
     public virtual bool Exists(string id)
 #pragma warning disable CA1827 // 不要在可使用 Any() 時使用 Count() 或 LongCount()
@@ -50,9 +59,11 @@ public abstract class CosmosDbRepository<T> : IRepository<T> where T : Entity
 #pragma warning restore CA1827 // 不要在可使用 Any() 時使用 Count() 或 LongCount()
 
     public virtual Task<T> AddAsync(T entity)
-        => null == entity
+    {
+        return null == entity
             ? throw new ArgumentNullException(nameof(entity))
             : Task.FromResult(ObjectSet.Add(entity).Entity);
+    }
 
     [RequiresUnreferencedCode("CosmosDB repository use reflection to update entity.")]
     public virtual async Task<T> UpdateAsync(T entity)
@@ -65,9 +76,11 @@ public abstract class CosmosDbRepository<T> : IRepository<T> where T : Entity
     }
 
     public virtual Task<T> AddOrUpdateAsync(T entity)
-        => Exists(entity.id)
+    {
+        return Exists(entity.id)
             ? UpdateAsync(entity)
             : AddAsync(entity);
+    }
 
     public virtual async Task DeleteAsync(T entity)
     {
@@ -93,5 +106,7 @@ public abstract class CosmosDbRepository<T> : IRepository<T> where T : Entity
     }
 
     public Task<int> CountAsync()
-        => ObjectSet.CountAsync();
+    {
+        return ObjectSet.CountAsync();
+    }
 }

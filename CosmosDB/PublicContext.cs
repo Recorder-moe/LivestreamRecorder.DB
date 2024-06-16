@@ -9,9 +9,6 @@ namespace LivestreamRecorder.DB.CosmosDB;
 
 public class PublicContext : DbContext
 {
-    public DbSet<Video> Videos { get; set; }
-    public DbSet<Channel> Channels { get; set; }
-
     public PublicContext()
     {
     }
@@ -19,6 +16,9 @@ public class PublicContext : DbContext
     public PublicContext(DbContextOptions<PublicContext> options) : base(options)
     {
     }
+
+    public DbSet<Video> Videos { get; set; }
+    public DbSet<Channel> Channels { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

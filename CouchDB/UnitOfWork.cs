@@ -5,19 +5,16 @@ namespace LivestreamRecorder.DB.CouchDB;
 
 public class UnitOfWork : IUnitOfWork, IDisposable
 {
-    public CouchContext Context { get; set; }
-
-    public UnitOfWork(CouchContext context)
+    protected UnitOfWork(CouchContext context)
     {
         Context = context;
-        if (!Context.Client.IsUpAsync().Result)
-        {
-            throw new InvalidOperationException($"CouchDB {Context.Client.Endpoint} is down.");
-        }
+        if (!Context.Client.IsUpAsync().Result) throw new InvalidOperationException($"CouchDB {Context.Client.Endpoint} is down.");
     }
 
+    public CouchContext Context { get; set; }
+
     /// <summary>
-    /// There's no transaction concept in CouchDB so this actually does nothing.
+    ///     There's no transaction concept in CouchDB so this actually does nothing.
     /// </summary>
     public void Commit()
     {
@@ -33,7 +30,7 @@ public class UnitOfWork : IUnitOfWork, IDisposable
         {
             if (disposing)
             {
-                // Notice: CouchDB Context is regestered as singleton.
+                // Notice: CouchDB Context is registered as singleton.
                 // So, we don't dispose it.
                 // https://github.com/matteobortolazzo/couchdb-net#dependency-injection
                 //Context.Dispose();
