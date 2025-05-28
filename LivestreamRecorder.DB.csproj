@@ -1,28 +1,32 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-    <IsAotCompatible>false</IsAotCompatible>
-    <Configurations>CouchDB;CosmosDB;AzureCosmosDB_Release;ApacheCouchDB_Release</Configurations>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='CosmosDB|AnyCPU'" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='CouchDB|AnyCPU'" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ApacheCouchDB_Release|AnyCPU'">
-    <DefineConstants>$(DefineConstants);COUCHDB;RELEASE</DefineConstants>
-    <Optimize>True</Optimize>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='AzureCosmosDB_Release|AnyCPU'">
-    <DefineConstants>$(DefineConstants);COSMOSDB;RELEASE</DefineConstants>
-    <Optimize>True</Optimize>
-  </PropertyGroup>
-  <ItemGroup>
-    <PackageReference Include="CouchDB.NET" Version="3.6.1" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="ValueInjecter" Version="3.2.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Cosmos" Version="8.0.5" />
-  </ItemGroup>
-  <ItemGroup>
-    <TrimmerRootAssembly Include="ValueInjecter" />
-  </ItemGroup>
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <IsAotCompatible>false</IsAotCompatible>
+        <Configurations>CouchDB;CosmosDB;AzureCosmosDB_Release;ApacheCouchDB_Release</Configurations>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='CosmosDB|AnyCPU'">
+        <DefineConstants>$(DefineConstants);COSMOSDB</DefineConstants>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='CouchDB|AnyCPU'">
+        <DefineConstants>$(DefineConstants);COUCHDB</DefineConstants>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ApacheCouchDB_Release|AnyCPU'">
+        <DefineConstants>$(DefineConstants);COUCHDB;RELEASE</DefineConstants>
+        <Optimize>True</Optimize>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='AzureCosmosDB_Release|AnyCPU'">
+        <DefineConstants>$(DefineConstants);COSMOSDB;RELEASE</DefineConstants>
+        <Optimize>True</Optimize>
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="CouchDB.NET" Version="3.6.1"/>
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.3"/>
+        <PackageReference Include="ValueInjecter" Version="3.2.0"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Cosmos" Version="8.0.5"/>
+    </ItemGroup>
+    <ItemGroup>
+        <TrimmerRootAssembly Include="ValueInjecter"/>
+    </ItemGroup>
 </Project>
