@@ -24,7 +24,7 @@ public class Channel : Entity
         set
         {
             Source = value.Split(':').First();
-            id = value.Split(':').Last();
+            id = value[(value.IndexOf(':') + 1)..];
         }
     }
 #endif
